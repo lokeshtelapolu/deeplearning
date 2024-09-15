@@ -1,0 +1,30 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+np.random.seed(0)
+X = np.sort(np.random.rand(30))  # Random X values
+y = np.sin(2 * np.pi * X) + np.random.randn(30) * 0.1  # True function + noise
+
+# Function to plot polynomial regression
+def plot_polynomial_regression(degree):
+    poly = PolynomialFeatures(degree=degree)
+    X_poly = poly.fit_transform(X.reshape(-1, 1))
+    
+    model = LinearRegression()
+    model.fit(X_poly, y)
+    
+    # Predict values
+    X_pred = np.linspace(0, 1, 100)
+    y_pred = model.predict(poly.transform(X_pred.reshape(-1, 1)))
+    
+    # Plot results
+    plt.scatter(X, y, color='blue', label='Samples')
+    plt.plot(X_pred, y_pred, color='orange', label='Model')
+    plt.plot(X_pred, np.sin(2 * np.pi * X_pred), color='green', label='True function')
+    plt.title(f"Degree {degree}")
+    plt.legend()
+    plt.show()
+# Plot for different degrees
+for degree in [1, 4, 15]:
+    plot_polynomial_regression(degree)
